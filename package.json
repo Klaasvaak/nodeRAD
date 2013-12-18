@@ -1,0 +1,15 @@
+{
+  "name": "nodeRAD",
+  "version": "0.0.1",
+  "scripts": {
+      "start": "nodemon app.js"
+  },
+  "main": "./app.js",
+  "devDependencies": {
+    "mysql": "2.0.0-alpha9",
+    "nodemon": "*",
+    "async": "*",
+    "squel": "*"
+  },
+  "readmeFilename": "README.md"
+}
