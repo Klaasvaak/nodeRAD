@@ -104,9 +104,8 @@ ControllerBase.prototype.execute = function(callback) {
                     // TODO send correct error
                     callback({error: true});
                 } else {
-                    self.doAction(self.getAction(), model, view, function(result) {
+                    self.doAction(self.getAction(), function(result) {
                         self.handleOutput(view, result, callback);
-                        self.finish();
                     });
                 }
             });
@@ -121,25 +120,28 @@ ControllerBase.prototype.finish = function() {
 };
 
 ControllerBase.prototype.handleOutput = function(view, result, callback) {
+    var self = this;
+
     view.setOutput(result, function() {
         view.display(callback);
+        self.finish();
     });
 };
 
-ControllerBase.prototype.doAction = function(action, model, view, callback) {
+ControllerBase.prototype.doAction = function(action, callback) {
     action = 'action' + action.capitalize(true);
     if (typeof this[action] === 'function') {
-        this[action](model, view, callback);
+        this[action](callback);
     } else {
         callback(new Exceptions.ViewNotFound('action: ' + action + ' not found.'));
     }
 };
 
-ControllerBase.prototype.actionGet = function(model, view, callback) {
-    if (inflector.isSingular(view.identifier.getName())) {
-        this.doAction('read', model, view, callback);
+ControllerBase.prototype.actionGet = function(callback) {
+    if (inflector.isSingular(this.query.view)) {
+        this.doAction('read', callback);
     } else {
-        this.doAction('browse', model, view, callback);
+        this.doAction('browse', callback);
     }
 };
 
@@ -174,15 +176,19 @@ ControllerBase.prototype.actionAdd = function() {
 
 };
 
-ControllerBase.prototype.actionRead = function(model, view, callback) {
-    model.getItem(function(item) {
-        callback(item);
+ControllerBase.prototype.actionRead = function(callback) {
+    this.getModel(function(model) {
+        model.getItem(function(item) {
+            callback(item);
+        });
     });
 };
 
-ControllerBase.prototype.actionBrowse = function(model, view, callback) {
-    model.getList(function(list) {
-        callback(list);
+ControllerBase.prototype.actionBrowse = function(callback) {
+    this.getModel(function(model) {
+        model.getList(function(list) {
+            callback(list);
+        });
     });
 };
 
