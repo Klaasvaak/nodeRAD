@@ -45,34 +45,34 @@ function Inflector() {
         [/people$/i, 'person'],
         [/taxa$/i, 'taxon'],
         [/databases$/i, 'database'],
-        [/(quiz)zes$/i, '\1'],
-        [/(matr|suff)ices$/i, '\1ix'],
-        [/(vert|ind)ices$/i, '\1ex'],
-        [/^(ox)en/i, '\1'],
-        [/(alias|status)es$/i, '\1'],
-        [/(alias|status)$/i, '\1'],
-        [/(tomato|hero|buffalo)es$/i, '\1'],
-        [/([octop|vir])i$/i, '\1us'],
-        [/(gen)era$/i, '\1us'],
-        [/(cris|^ax|test)es$/i, '\1is'],
-        [/(shoe)s$/i, '\1'],
-        [/(o)es$/i, '\1'],
-        [/(bus)es$/i, '\1'],
-        [/([m|l])ice$/i, '\1ouse'],
-        [/(x|ch|ss|sh)es$/i, '\1'],
-        [/(m)ovies$/i, '\1ovie'],
-        [/(s)eries$/i, '\1eries'],
-        [/([^aeiouy]|qu)ies$/i, '\1y'],
-        [/([lr])ves$/i, '\1f'],
-        [/(tive)s$/i, '\1'],
-        [/(hive)s$/i, '\1'],
-        [/([^f])ves$/i, '\1fe'],
-        [/(^analy)ses$/i, '\1sis'],
-        [/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$/i, '\1\2sis'],
-        [/([ti]|addend)a$/i, '\1um'],
+        [/(quiz)zes$/i, '$1'],
+        [/(matr|suff)ices$/i, '$1ix'],
+        [/(vert|ind)ices$/i, '$1ex'],
+        [/^(ox)en/i, '$1'],
+        [/(alias|status)es$/i, '$1'],
+        [/(alias|status)$/i, '$1'],
+        [/(tomato|hero|buffalo)es$/i, '$1'],
+        [/([octop|vir])i$/i, '$1us'],
+        [/(gen)era$/i, '$1us'],
+        [/(cris|^ax|test)es$/i, '$1is'],
+        [/(shoe)s$/i, '$1'],
+        [/(o)es$/i, '$1'],
+        [/(bus)es$/i, '$1'],
+        [/([m|l])ice$/i, '$1ouse'],
+        [/(x|ch|ss|sh)es$/i, '$1'],
+        [/(m)ovies$/i, '$1ovie'],
+        [/(s)eries$/i, '$1eries'],
+        [/([^aeiouy]|qu)ies$/i, '$1y'],
+        [/([lr])ves$/i, '$1f'],
+        [/(tive)s$/i, '$1'],
+        [/(hive)s$/i, '$1'],
+        [/([^f])ves$/i, '$1fe'],
+        [/(^analy)ses$/i, '$1sis'],
+        [/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$/i, '$1$2sis'],
+        [/([ti]|addend)a$/i, '$1um'],
         [/(alumn|formul)ae$/i, '$1a'],
-        [/(n)ews$/i, '\1ews'],
-        [/(.*)ss$/i, '\1ss'],
+        [/(n)ews$/i, '$1ews'],
+        [/(.*)ss$/i, '$1ss'],
         [/(.*)s$/i, '$1']
     ];
 
@@ -92,6 +92,40 @@ function Inflector() {
         'swine'
     ];
 
+    this.defined = [];
+
+    this.define = function(single, plural) {
+        this.defined.push({ single: single, plural: plural});
+    };
+
+    this.isDefined = function(property, word) {
+        var definedWord = undefined;
+
+        for(var i = 0; i < this.defined.length; i++) {
+            definedWord = this.defined[i];
+
+            if (definedWord[property] === word) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    this.getDefined = function(property, word) {
+        var definedWord = undefined;
+
+        for(var i = 0; i < this.defined.length; i++) {
+            definedWord = this.defined[i];
+
+            if (definedWord[property] === word) {
+                return definedWord;
+            }
+        }
+
+        return undefined;
+    };
+
     /**
      * singularize function will make a singular of a plural word
      * If the word is singular it will do nothing.
@@ -101,6 +135,11 @@ function Inflector() {
      * @returns {String} Singular word
      */
     this.singularize = function(word) {
+        var defined;
+        if ((defined = this.getDefined('plural', word)) !== undefined) {
+            return defined.single;
+        }
+
         var wlc = word.toLowerCase();
 
         for (var i = 0; i < this.uncountables.length; i++) {
@@ -130,13 +169,18 @@ function Inflector() {
      * @returns {String} Plural word
      */
     this.pluralize = function (word) {
+        var defined;
+        if ((defined = this.getDefined('single', word)) !== undefined) {
+            return defined.plural;
+        }
+
         // Make the word singular.
         word = this.singularize(word);
         var wlc = word.toLowerCase();
 
         for (var i = 0; i < this.uncountables.length; i++) {
             var uncountable = this.uncountables[i];
-            if (wlc == uncountable) {
+            if (wlc === uncountable) {
                 return word;
             }
         }
@@ -162,7 +206,7 @@ function Inflector() {
      * @returns {boolean} True or false.
      */
     this.isSingular = function(word) {
-        if(this.singularize(this.pluralize(word)) == word) {
+        if(this.singularize(this.pluralize(word)) === word) {
             return true;
         }
         return false;
@@ -177,7 +221,7 @@ function Inflector() {
      * @returns {boolean} True or false.
      */
     this.isPlural = function(word) {
-        if(this.pluralize(this.singularize(word)) == word) {
+        if(this.pluralize(this.singularize(word)) === word) {
             return true;
         }
         return false;
