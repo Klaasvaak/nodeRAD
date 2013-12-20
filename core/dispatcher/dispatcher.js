@@ -14,11 +14,16 @@ Dispatcher.prototype.initialize = function(config, next) {
 };
 
 Dispatcher.prototype.dispatch = function() {
+    var self = this;
     var controllerIdentifier = this.identifier.clone().setPath('controller').setName(this.identifier.getComponent());
 
     var loader = new Loader();
     loader.load(controllerIdentifier, { req: this.req, res: this.res, query: this.query }, function(controller) {
-        controller.execute();
+        controller.execute(function(result) {
+            // TODO: res.writeHead status
+            // TODO: error handling
+            self.res.end(result);
+        });
     });
 };
 

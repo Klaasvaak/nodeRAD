@@ -55,6 +55,7 @@ ControllerBase.prototype.loadView = function(callback) {
 ControllerBase.prototype.getViewConfig = function(callback) {
     var format = this.getFormat();
     var name = this.query.view;
+
     this.getModel(function(model) {
         callback({
             format: format,
@@ -62,8 +63,6 @@ ControllerBase.prototype.getViewConfig = function(callback) {
             name: name
         });
     });
-
-
 };
 
 ControllerBase.prototype.getView = function(callback) {
@@ -92,22 +91,22 @@ ControllerBase.prototype.getAction = function() {
     return this.query.action ? this.query.action : this.request.method;
 };
 
-ControllerBase.prototype.execute = function() {
+ControllerBase.prototype.execute = function(callback) {
     var self = this;
 
     this.getView(function(view) {
         if (!view) {
-            self.response.end('view not found');
+            // TODO send correct error
+            callback({ error: true});
         } else {
             self.getModel(function(model) {
                 if (!model) {
-                    self.response.end('model not found');
+                    // TODO send correct error
+                    callback({error: true});
                 } else {
                     self.doAction(self.getAction(), model, view, function(result) {
-                        self.handleOutput(self.response, result);
-                        self.getModel(function(model) {
-                            model.finish();
-                        });
+                        self.handleOutput(view, result, callback);
+                        self.finish();
                     });
                 }
             });
@@ -115,14 +114,16 @@ ControllerBase.prototype.execute = function() {
     });
 };
 
-ControllerBase.prototype.handleOutput = function(response, result) {
-    if (result instanceof Exceptions.BaseException) {
-        response.writeHead(result.code);
-        response.end(result.message);
-    } else {
-        // TODO status code
-        response.end(result);
+ControllerBase.prototype.finish = function() {
+    if (this.model) {
+        this.model.finish();
     }
+};
+
+ControllerBase.prototype.handleOutput = function(view, result, callback) {
+    view.setOutput(result, function() {
+        view.display(callback);
+    });
 };
 
 ControllerBase.prototype.doAction = function(action, model, view, callback) {
@@ -175,18 +176,13 @@ ControllerBase.prototype.actionAdd = function() {
 
 ControllerBase.prototype.actionRead = function(model, view, callback) {
     model.getItem(function(item) {
-        view.setOutput(item, function() {
-            view.display(callback);
-        });
-        view.display(callback);
+        callback(item);
     });
 };
 
 ControllerBase.prototype.actionBrowse = function(model, view, callback) {
     model.getList(function(list) {
-        view.setOutput(list, function() {
-            view.display(callback);
-        });
+        callback(list);
     });
 };
 
