@@ -17,10 +17,8 @@
   ],
   "main": "./index.js",
   "devDependencies": {
-    "mysql": "2.0.0-alpha9",
-    "nodemon": "*",
-    "async": "*",
-    "squel": "*"
+    "mocha": "*",
+    "should": "*"
   },
   "description": "nodeRAD ======= **Inspired by Nooku, see: http://nooku.org**",
   "bugs": {
