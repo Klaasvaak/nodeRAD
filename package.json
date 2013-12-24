@@ -1,15 +1,50 @@
 {
-  "name": "nodeRAD",
+  "name": "node-rad",
   "version": "0.0.1",
   "scripts": {
-      "start": "nodemon app.js"
+    "start": "nodemon app.js"
   },
-  "main": "./app.js",
+  "author": "klaasvaak",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Klaasvaak/nodeRAD"
+  },
+  "licenses": [
+    {
+      "type": "LPGL",
+      "url": "https://github.com/Klaasvaak/nodeRAD/blob/master/LICENSE"
+    }
+  ],
+  "main": "./index.js",
   "devDependencies": {
     "mysql": "2.0.0-alpha9",
     "nodemon": "*",
     "async": "*",
     "squel": "*"
   },
-  "readmeFilename": "README.md"
+  "description": "nodeRAD ======= **Inspired by Nooku, see: http://nooku.org**",
+  "bugs": {
+    "url": "https://github.com/Klaasvaak/nodeRAD/issues"
+  },
+  "homepage": "https://github.com/Klaasvaak/nodeRAD",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "async": "~0.2.9",
+    "mysql": "~2.0.0-alpha9",
+    "nodemon": "~0.7.10",
+    "socket.io": "~0.9.16",
+    "squel": "~1.2.1",
+    "commander": "1.3.2",
+    "mkdirp": "0.3.5",
+    "ncp": "0.5.0"
+  },
+  "keywords": [
+    "RAD"
+  ],
+  "bin": {
+    "node-rad": "./bin/node-rad"
+  },
+  "license": "LPGL"
 }

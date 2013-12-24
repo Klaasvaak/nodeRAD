@@ -1,0 +1,84 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var pkg     = require('../package.json');
+var version = pkg.version;
+var os      = require('os');
+var fs      = require('fs');
+var ncp     = require('ncp');
+
+program
+    .version(version)
+    .usage('[options] [dir]')
+    .parse(process.argv);
+
+var path = program.args.shift() || '.';
+
+var eol = os.EOL;
+
+var templatePath = './template';
+
+(function createApplication(path) {
+    emptyDirectory(path, function(empty){
+        if (empty || program.force) {
+            createApplicationAt(path);
+        } else {
+            program.confirm('destination is not empty, continue? ', function(ok){
+                if (ok) {
+                    process.stdin.destroy();
+                    createApplicationAt(path);
+                } else {
+                    abort('aborting');
+                }
+            });
+        }
+    });
+})(path);
+
+/**
+ * Create application at the given directory `path`.
+ *
+ * @param {String} path
+ */
+function createApplicationAt(path) {
+    console.log();
+
+    mkdir(path, function(){
+        copyTemplate();
+    });
+}
+
+function copyTemplate() {
+    console.log('copying template...');
+    ncp(templatePath, path, function(err) {
+        if (err) {
+            console.log('error: ');
+            console.log(err);
+        } else {
+            console.log('template copied');
+        }
+    })
+};
+
+/**
+ * Check if the given directory `path` is empty.
+ *
+ * @param {String} path
+ * @param {Function} fn
+ */
+function emptyDirectory(path, fn) {
+    fs.readdir(path, function(err, files){
+        if (err && 'ENOENT' != err.code) throw err;
+        fn(!files || !files.length);
+    });
+}
+
+/**
+ * Exit with the given `str`.
+ *
+ * @param {String} str
+ */
+function abort(str) {
+    console.error(str);
+    process.exit(1);
+}
