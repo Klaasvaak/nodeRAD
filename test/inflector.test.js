@@ -1,4 +1,3 @@
-var should = require('should');
 var inflector = require('../lib/inflector/inflector.js');
 
 function isSingular(word, expected) {
@@ -29,16 +28,15 @@ function singularize(word, expected) {
     });
 }
 
-
 describe('Inflector', function() {
 
-    describe('pluralize', function() {
+    describe('#pluralize()', function() {
         pluralize('wolf', 'wolves');
         pluralize('alumunium', 'alumunia');
         pluralize('formula', 'formulae');
     });
 
-    describe('isPlural', function() {
+    describe('#isPlural()', function() {
         isPlural('wolves', true);
         isPlural('alumunia', true);
         isPlural('formulae', true);
@@ -48,13 +46,13 @@ describe('Inflector', function() {
         isPlural('formula', false);
     });
 
-    describe('singularize', function() {
+    describe('#singularize()', function() {
         singularize('wolves', 'wolf');
         singularize('alumunia', 'alumunium');
         singularize('formulae', 'formula');
     });
 
-    describe('isSingular', function() {
+    describe('#isSingular()', function() {
         isSingular('wolf', true);
         isSingular('alumunium', true);
         isSingular('formula', true);
@@ -63,4 +61,15 @@ describe('Inflector', function() {
         isSingular('alumunia', false);
         isSingular('formulae', false);
     });
+
+    describe('#define() with #pluralize() and #singularize()', function() {
+        it('should return the string chickens if chickens is defined as plural of wolf', function(done) {
+            var inf = Object.create(inflector)
+            inf.define('wolf', 'chickens');
+            inf.pluralize('wolf').should.equal('chickens');
+            inf.singularize('chickens').should.equal('wolf');
+            done();
+        });
+    });
+
 });
