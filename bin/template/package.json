@@ -6,6 +6,7 @@
         "start": "node app.js"
     },
     "dependencies": {
-        "node-rad": "0.0.1"
+        "node-rad": "0.0.1",
+        "nconf": "0.6.9"
     }
 }

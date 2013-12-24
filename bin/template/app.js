@@ -1,7 +1,11 @@
-var configuration = require('./configuration.js');
-var http = require('http');
-var Router = require('node-rad').Router;
+var http            = require('http');
+var nconf           = require('nconf');
+var Router          = require('node-rad').Router;
+
+nconf.argv()
+    .env()
+    .file({file: process.cwd() + '/config.json'});
 
 http.createServer(function(req, res) {
     new Router(req, res).route();
-}).listen(configuration.port);
+}).listen(nconf.get('port'));
