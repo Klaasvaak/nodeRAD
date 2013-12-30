@@ -9,3 +9,5 @@ nconf.argv()
 http.createServer(function(req, res) {
     new Router(req, res).route();
 }).listen(nconf.get('port'));
+
+console.log('app running on port: ' + nconf.get('port'));
