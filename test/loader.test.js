@@ -20,7 +20,6 @@ var TablePeople = require('./env/admin/people/database/table/people.js');
 var Identifier = require('../lib/loader/identifier.js');
 
 describe('Loader', function() {
-    console.log('rooooot' + nconf.get('root'));
 
     it('should load an object if a correct string is given as identifier parameter', function(done) {
         loader.load('admin.people.controller.people', {}, function(err, controller) {
