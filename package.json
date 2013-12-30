@@ -20,7 +20,7 @@
     "mocha": "*",
     "should": "*"
   },
-  "description": "nodeRAD ======= **Inspired by Nooku, see: http://nooku.org**",
+  "description": "",
   "bugs": {
     "url": "https://github.com/Klaasvaak/nodeRAD/issues"
   },
