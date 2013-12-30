@@ -1,5 +1,5 @@
-var util            = require('node-rad').Util;
-var ControllerBase  = require('node-rad').ControllerBase;
+var util            = require('../../../../../index.js').Util;
+var ControllerBase  = require('../../../../../index.js').ControllerBase;
 
 function ControllerDefault() {
     ControllerDefault.super_.apply(this, arguments);
