@@ -64,10 +64,10 @@ describe('Inflector', function() {
 
     describe('#define() with #pluralize() and #singularize()', function() {
         it('should return the string chickens if chickens is defined as plural of wolf', function(done) {
-            var inf = Object.create(inflector)
-            inf.define('wolf', 'chickens');
-            inf.pluralize('wolf').should.equal('chickens');
-            inf.singularize('chickens').should.equal('wolf');
+            inflector.define('wolf', 'chickens');
+            inflector.pluralize('wolf').should.equal('chickens');
+            inflector.singularize('chickens').should.equal('wolf');
+
             done();
         });
     });
