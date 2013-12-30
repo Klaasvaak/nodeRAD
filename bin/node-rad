@@ -11,15 +11,15 @@ var ncp     = require('ncp');
 program
     .version(version)
     .usage('[options] [dir]')
-    .option('-t, --template', 'path to template (default to template folder in bin)')
+    //.option('-t, --template', 'path to template (default to template folder in bin)')
     .parse(process.argv);
 
 var path = program.args.shift() || '.';
 
 var templatePath = './template';
-if (program.template) {
-    templatePath = program.template;
-}
+/*if (program.template) {
+    //TODO
+}*/
 
 (function createApplication(path) {
     emptyDirectory(path, function(empty){
