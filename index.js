@@ -21,3 +21,5 @@ module.exports.Util = require('./lib/util/util.js');
 module.exports.ViewHandler = require('./lib/view/default.js');
 module.exports.ViewJson = require('./lib/view/json.js');
 module.exports.ViewBase = require('./lib/view/base.js');
+
+module.exports.nconf = require('nconf');
