@@ -1,5 +1,5 @@
-var util        = require('node-rad').Util;
-var ModelTable  = require('node-rad').ModelTable;
+var util        = require('../../../../../index.js').Util;
+var ModelTable  = require('../../../../../index.js').ModelTable;
 
 function ModelDefault() {
     ModelTable.super_.apply(this, arguments);

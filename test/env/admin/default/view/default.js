@@ -1,5 +1,5 @@
-var util        = require('node-rad').Util;
-var ViewHolder  = require('node-rad').ViewHandler;
+var util        = require('../../../../../index.js').Util;
+var ViewHolder  = require('../../../../../index.js').ViewHandler;
 
 function ViewDefault() {
     ViewDefault.super_.apply(this, arguments);
